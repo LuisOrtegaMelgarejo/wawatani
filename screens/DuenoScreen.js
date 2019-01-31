@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View, FlatList,ActivityIndicator,Picker,Button ,TextInput
+  View, FlatList,ActivityIndicator,Picker,Button ,TextInput,Alert
 } from 'react-native';
 import PushNotification from 'react-native-push-notification';
 
@@ -20,8 +20,52 @@ export default class DuenoScreen extends React.Component {
     super(props);
     this.state = {isLoading: true,text: '',direccion: ''}
   }
+  componentDidMount(){
+    this.textInput.clear()
+    this.textInput2.clear()
+  }
 
-  onPressLearnMore(mascota,tipo){
+  onPressLearnMore(direccion,tipo){
+    peru = direccion + ' , PE'
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(peru)}&key=AIzaSyDTJFBvclGDClXsdQXDDJWdNribc9kJAtY`)
+    .then((response) =>{
+      var respuesta = JSON.parse(response['_bodyInit'])
+      if(respuesta.status=='ZERO_RESULTS'){
+        Alert.alert(
+          'ERROR',
+          'Direccion no valida',
+          {cancelable: true},
+        );
+      }else{
+        console.log(respuesta.results[0])
+        data = JSON.stringify({
+          name: tipo,
+          direccion: respuesta.results[0].formatted_address,
+          pointx: respuesta.results[0].geometry.location.lat,
+          pointy: respuesta.results[0].geometry.location.lng
+        });
+       fetch('http://40.87.47.203:8080/rimac/api/dueno', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body:data
+        }).then(res => {
+            Alert.alert(
+              '',
+              'Dueño guardado con exito',
+              [
+                {text: 'OK', onPress: () => this.componentDidMount()},
+              ],
+              {cancelable: false},
+            );
+          }).catch((error) =>{
+            console.error(error);
+          });
+
+      }
+    });
     
   }
 
@@ -35,7 +79,7 @@ export default class DuenoScreen extends React.Component {
           </View>
           <View style={styles.welcomeContainer}>
             <Text style={styles.othertext}>Nombre</Text>
-            <TextInput
+            <TextInput  ref={input => { this.textInput = input }}
               editable = {true}
               maxLength = {40}
               style={{height: 50, width: 300}}
@@ -47,7 +91,7 @@ export default class DuenoScreen extends React.Component {
           </View>
           <View style={styles.welcomeContainer}>
             <Text style={styles.othertext}>Direccion</Text>
-            <TextInput
+            <TextInput ref={input => { this.textInput2 = input }}
               editable = {true}
               maxLength = {40}
               style={{height: 50, width: 300}}
@@ -60,7 +104,7 @@ export default class DuenoScreen extends React.Component {
           <View style={styles.welcomeContainer}>
             <Button
                 onPress={() => this.onPressLearnMore(this.state.direccion,this.state.text)}
-                title="Agendar visita"
+                title="Registrar dueño"
                 color="#841584"
                 disabled={this.state.text=='' || this.state.direccion==''}
               />

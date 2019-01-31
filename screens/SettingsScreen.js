@@ -21,7 +21,7 @@ export default class SettingsScreen extends React.Component {
   }
   componentDidMount(){
 
-    return fetch('http://40.87.47.203:8080/rimac/api/dueno')
+    fetch('http://40.87.47.203:8080/rimac/api/dueno')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -38,6 +38,7 @@ export default class SettingsScreen extends React.Component {
           dueno: 0,
           text: ''
         }, function(){
+          this.textInput.clear()
 
         });
 
@@ -115,7 +116,7 @@ export default class SettingsScreen extends React.Component {
         </View>
         <View style={styles.welcomeContainer}>
           <Text style={styles.othertext}>Nombre</Text>
-          <TextInput
+          <TextInput  ref={input => { this.textInput = input }}
             editable = {true}
             maxLength = {40}
             style={{height: 50, width: 300}}
