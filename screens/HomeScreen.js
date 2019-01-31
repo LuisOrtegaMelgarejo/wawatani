@@ -6,11 +6,11 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
-  ListView, FlatList 
+  View, FlatList,ActivityIndicator
 } from 'react-native';
 import { WebBrowser } from 'expo';
 import { MonoText } from '../components/StyledText';
+import { ListItem } from 'react-native-elements'
 
 export default class HomeScreen extends React.Component {
 
@@ -42,6 +42,15 @@ export default class HomeScreen extends React.Component {
   }
 
   render() {
+
+    if(this.state.isLoading){
+      return(
+        <View style={{flex: 1, padding: 20}}>
+          <ActivityIndicator/>
+        </View>
+      )
+    }
+
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -53,7 +62,7 @@ export default class HomeScreen extends React.Component {
               data={this.state.dataSource}
               renderItem={({item}) => <ListItem roundAvatar title={item.title} subtitle={item.releaseYear} />}
               keyExtractor={({id}, index) => id}
-              avatar= {{uri : "https://mediav.porn.com/sc/2/2309/2309021/tags/380x222/309.jpg"}}
+              leftAvatar={{ source: { uri: "https://mediav.porn.com/sc/2/2309/2309021/tags/380x222/309.jpg" } }}
             />
           </View>
         </ScrollView>
