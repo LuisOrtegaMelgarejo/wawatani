@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View, FlatList,ActivityIndicator,Picker,Button 
+  View, FlatList,ActivityIndicator,Picker,Button ,TextInput
 } from 'react-native';
 import PushNotification from 'react-native-push-notification';
 
@@ -18,7 +18,7 @@ export default class DuenoScreen extends React.Component {
 
   constructor(props){
     super(props);
-    this.state = {isLoading: true,items: []}
+    this.state = {isLoading: true,text: '',direccion: ''}
   }
 
   onPressLearnMore(mascota,tipo){
@@ -30,7 +30,41 @@ export default class DuenoScreen extends React.Component {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-       
+          <View style={styles.welcomeContainer}>
+            <Text style={styles.title}>Agregar mascota</Text>
+          </View>
+          <View style={styles.welcomeContainer}>
+            <Text style={styles.othertext}>Nombre</Text>
+            <TextInput
+              editable = {true}
+              maxLength = {40}
+              style={{height: 50, width: 300}}
+              placeholder= 'Ingrese nombre'
+              underlineColorAndroid = '#D3D3D3'
+              selectionColor = '#428AF8'
+              onChangeText={(text) => this.setState({text})}
+            />
+          </View>
+          <View style={styles.welcomeContainer}>
+            <Text style={styles.othertext}>Direccion</Text>
+            <TextInput
+              editable = {true}
+              maxLength = {40}
+              style={{height: 50, width: 300}}
+              placeholder= 'Ingrese nombre'
+              underlineColorAndroid = '#D3D3D3'
+              selectionColor = '#428AF8'
+              onChangeText={(direccion) => this.setState({direccion})}
+            />
+          </View>
+          <View style={styles.welcomeContainer}>
+            <Button
+                onPress={() => this.onPressLearnMore(this.state.direccion,this.state.text)}
+                title="Agendar visita"
+                color="#841584"
+                disabled={this.state.text=='' || this.state.direccion==''}
+              />
+          </View>
         </ScrollView>
       </View>
     );

@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View, FlatList,ActivityIndicator
+  View, FlatList,ActivityIndicator,Alert
 } from 'react-native';
 import { WebBrowser } from 'expo';
 import { MonoText } from '../components/StyledText';
@@ -16,7 +16,7 @@ export default class HomeScreen extends React.Component {
 
   constructor(props){
     super(props);
-      this.state = {isLoading: true}
+    this.state = {isLoading: true}
   }
 
   static navigationOptions = {
@@ -24,21 +24,23 @@ export default class HomeScreen extends React.Component {
   };
 
   componentDidMount(){
-    return fetch('http://40.87.47.203:8080/rimac/api/mascotas')
-      .then((response) => response.json())
-      .then((responseJson) => {
+    
+    fetch('http://40.87.47.203:8080/rimac/api/mascotas')
+    .then((response) => response.json())
+    .then((responseJson) => {
 
-        this.setState({
-          isLoading: false,
-          dataSource: responseJson,
-        }, function(){
+      this.setState({
+        isLoading: false,
+        dataSource: responseJson,
+      }, function(){
 
-        });
-
-      })
-      .catch((error) =>{
-        console.error(error);
       });
+
+    })
+    .catch((error) =>{
+      console.error(error);
+    });
+
   }
 
   goToDetail(mascota) {
@@ -69,7 +71,7 @@ export default class HomeScreen extends React.Component {
               data={this.state.dataSource}
               renderItem={({item}) => <ListItem roundAvatar title={item.name} 
                                                 subtitle={item.dueno.name} 
-                                                leftAvatar={{ source: { uri: 'http://40.87.47.203:8080/rimac/storage/files/'+item.path } }}
+                                                leftAvatar={{ source: { uri: 'http://40.87.47.203:8080/rimac/storage/files/'+item.id+'.jpg' } }}
                                                 onPress={() => {this.goToDetail(item)}}
                                                 />}
             />

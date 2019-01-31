@@ -29,8 +29,6 @@ export default class LinksScreen extends React.Component {
       mascota_id: mascota,
       type: tipo
     });
-    
-    console.log(data)
 
     return fetch('http://40.87.47.203:8080/rimac/api/mascotas/visita', {
       method: 'POST',
@@ -41,7 +39,14 @@ export default class LinksScreen extends React.Component {
       body:data
     })
     .then((response)=>{
-
+      Alert.alert(
+        '',
+        'Visita agendada con exito',
+        [
+          {text: 'OK', onPress: () => this.componentDidMount()},
+        ],
+        {cancelable: false},
+      );
     })
     .catch((error) =>{
       console.error(error);
@@ -56,11 +61,8 @@ export default class LinksScreen extends React.Component {
 
         var array = {}
         for(let pet of responseJson) {
-          console.log(pet);
           array[pet.id]=pet.name+' de '+pet.dueno.name+' ('+pet.type+')'
         }
-        console.log(array);
-
         this.setState({
           isLoading: false,
           items: array,
@@ -221,5 +223,11 @@ const styles = StyleSheet.create({
   helpLinkText: {
     fontSize: 14,
     color: '#2e78b7',
-  },
+  },title:{
+    fontSize: 18,
+    color: '#2e78b7',
+
+  },othertext:{
+    fontSize: 14,
+  }
 });

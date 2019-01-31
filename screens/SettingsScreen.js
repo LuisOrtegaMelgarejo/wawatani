@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View, FlatList,ActivityIndicator,Picker,Button,TextInput
+  View, FlatList,ActivityIndicator,Picker,Button,TextInput,Alert
 } from 'react-native';
 import {Constants, Permissions, ImagePicker } from 'expo';
 
@@ -35,7 +35,8 @@ export default class SettingsScreen extends React.Component {
           items: array,
           image: null,
           tipo: 0,
-          dueno: 0
+          dueno: 0,
+          text: ''
         }, function(){
 
         });
@@ -62,24 +63,27 @@ export default class SettingsScreen extends React.Component {
       body:data
     })
     .then((response)=>{
-       console.log(response)
-        var mascota = response
-        console.log("esta es la data de mascota")        
-        console.log(mascota)        
-        console.log("esta es el id de mascota")        
-        console.log(mascota.id)        
+        var mascota = response       
         const data = new FormData();
-
         data.append('file', {
           uri: image,
           type: 'image/jpeg', // or photo.type
-          name: mascota.id+'.jpg'
+          name: JSON.parse(mascota['_bodyInit']).id+'.jpg'
         }); 
         fetch('http://40.87.47.203:8080/rimac/storage/save', {
           method: 'post',
           body: data
         }).then(res => {
-          console.log(res)
+          Alert.alert(
+            '',
+            'Mascota guardada con exito',
+            [
+              {text: 'OK', onPress: () => this.componentDidMount()},
+            ],
+            {cancelable: false},
+          );
+        }).catch((error) =>{
+          console.error(error);
         });
     })
     .catch((error) =>{
@@ -118,6 +122,7 @@ export default class SettingsScreen extends React.Component {
             placeholder= 'Ingrese nombre'
             underlineColorAndroid = '#D3D3D3'
             selectionColor = '#428AF8'
+            onChangeText={(text) => this.setState({text})}
           />
           <Text style={styles.othertext}>Tipo</Text>
           <Picker
@@ -161,10 +166,10 @@ export default class SettingsScreen extends React.Component {
         </View>
         <View style={styles.welcomeContainer}>
            <Button
-              onPress={() => this.onPressLearnMore('Sasy',this.state.tipo,this.state.dueno,image)}
+              onPress={() => this.onPressLearnMore(this.state.text,this.state.tipo,this.state.dueno,image)}
               title="Guardar mascota"
               color="#841584"
-              disabled={image==null || this.state.dueno==0  || this.state.tipo==0}
+              disabled={image==null || this.state.dueno==0  || this.state.tipo==0 || this.state.text==''}
             />
          </View>
       </ScrollView>
@@ -175,9 +180,9 @@ export default class SettingsScreen extends React.Component {
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
-    });
+      quality : 0.2
 
-    console.log(result);
+    });
 
     if (!result.cancelled) {
       this.setState({ image: result.uri });
@@ -198,9 +203,9 @@ export default class SettingsScreen extends React.Component {
     let result = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
       aspect: [4, 3],
+      quality : 0.2
     });
 
-    console.log(result);
 
     if (!result.cancelled) {
       this.setState({ image: result.uri });

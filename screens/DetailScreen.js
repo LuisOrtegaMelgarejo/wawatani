@@ -28,7 +28,6 @@ export default class DetailScreen extends React.Component {
   componentDidMount(){
     const { navigation } = this.props;
     const mascota = navigation.getParam('mascota', 'null');
-    console.log(mascota);
     
     return fetch('http://40.87.47.203:8080/rimac/api/mascotas/'+mascota.id)
       .then((response) => response.json())
@@ -83,7 +82,7 @@ export default class DetailScreen extends React.Component {
               data={this.state.dataSource.citas}
               renderItem={({item}) => <ListItem roundAvatar title={item.type} 
                                                 subtitle={item.hora} 
-                                                leftAvatar={{ source: { uri: 'http://40.87.47.203:8080/rimac/storage/files/'+item.type+'.jpg' } }}
+                                                leftAvatar={{ source: { uri: 'http://40.87.47.203:8080/rimac/storage/files/'+item.id+'.jpg' } }}
                                                 />}
             />
           </View>
@@ -146,7 +145,7 @@ const styles = StyleSheet.create({
     marginLeft: -10,
   },
   map: {
-    height: 100,
+    height: 300,
     marginTop: 15,
   },
   getStartedContainer: {
