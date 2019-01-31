@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View, FlatList,ActivityIndicator,Picker,Button 
+  View, FlatList,ActivityIndicator,Picker,Button,Alert
 } from 'react-native';
 import PushNotification from 'react-native-push-notification';
 
