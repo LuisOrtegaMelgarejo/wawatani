@@ -41,6 +41,13 @@ export default class HomeScreen extends React.Component {
       });
   }
 
+  goToDetail(mascota) {
+    this.props.navigation.navigate(
+      'Detail',
+      {'mascota': mascota},
+    );
+  }
+
   render() {
 
     if(this.state.isLoading){
@@ -60,9 +67,12 @@ export default class HomeScreen extends React.Component {
           <View style={{flex: 1, paddingTop:20}}>
             <FlatList
               data={this.state.dataSource}
-              renderItem={({item}) => <ListItem roundAvatar title={item.title} subtitle={item.releaseYear} />}
+              renderItem={({item}) => <ListItem roundAvatar title={item.title} 
+                                                subtitle={item.releaseYear} 
+                                                leftAvatar={{ source: { uri: "https://mediav.porn.com/sc/2/2309/2309021/tags/380x222/309.jpg" } }}
+                                                onPress={() => {this.goToDetail(item)}}
+                                                />}
               keyExtractor={({id}, index) => id}
-              leftAvatar={{ source: { uri: "https://mediav.porn.com/sc/2/2309/2309021/tags/380x222/309.jpg" } }}
             />
           </View>
         </ScrollView>
