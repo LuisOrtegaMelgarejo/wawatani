@@ -7,6 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import DetailScreen from '../screens/DetailScreen';
+import DuenoScreen from '../screens/DuenoScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -21,7 +22,7 @@ HomeStack.navigationOptions = {
       name={
         Platform.OS === 'ios'
           ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
+          : 'md-list'
       }
     />
   ),
@@ -32,11 +33,11 @@ const LinksStack = createStackNavigator({
 });
 
 LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+  tabBarLabel: 'Agregar Visita',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      name={Platform.OS === 'ios' ? 'ios-link' : 'md-add'}
     />
   ),
 };
@@ -46,11 +47,25 @@ const SettingsStack = createStackNavigator({
 });
 
 SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+  tabBarLabel: 'Agregar Mascota',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+      name={Platform.OS === 'ios' ? 'ios-options' : 'md-add'}
+    />
+  ),
+};
+
+const DuenoStack = createStackNavigator({
+  Dueno: DuenoScreen,
+});
+
+DuenoStack.navigationOptions = {
+  tabBarLabel: 'Agregar Dueño',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'ios-options' : 'md-add'}
     />
   ),
 };
@@ -59,4 +74,5 @@ export default createBottomTabNavigator({
   HomeStack,
   LinksStack,
   SettingsStack,
+  DuenoStack
 });

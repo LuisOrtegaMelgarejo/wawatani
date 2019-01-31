@@ -1,4 +1,5 @@
 import React from 'react';
+import { ExpoLinksView } from '@expo/samples';
 import {
   Image,
   Platform,
@@ -6,80 +7,34 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View, FlatList,ActivityIndicator
+  View, FlatList,ActivityIndicator,Picker,Button 
 } from 'react-native';
-import { WebBrowser } from 'expo';
-import { MonoText } from '../components/StyledText';
-import { ListItem } from 'react-native-elements'
+import PushNotification from 'react-native-push-notification';
 
-export default class HomeScreen extends React.Component {
-
-  constructor(props){
-    super(props);
-      this.state = {isLoading: true}
-  }
-
+export default class DuenoScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
 
-  componentDidMount(){
-    return fetch('http://40.87.47.203:8080/rimac/api/mascotas')
-      .then((response) => response.json())
-      .then((responseJson) => {
-
-        this.setState({
-          isLoading: false,
-          dataSource: responseJson,
-        }, function(){
-
-        });
-
-      })
-      .catch((error) =>{
-        console.error(error);
-      });
+  constructor(props){
+    super(props);
+    this.state = {isLoading: true,items: []}
   }
 
-  goToDetail(mascota) {
-    this.props.navigation.navigate(
-      'Detail',
-      {'mascota': mascota},
-    );
+  onPressLearnMore(mascota,tipo){
+    
   }
 
   render() {
 
-    if(this.state.isLoading){
-      return(
-        <View style={{flex: 1, padding: 20}}>
-          <ActivityIndicator/>
-        </View>
-      )
-    }
-
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
-            <Text style={styles.title}>Lista de mascotas registradas</Text>
-          </View>
-          <View style={{flex: 1, paddingTop:15}}>
-            <FlatList
-              data={this.state.dataSource}
-              renderItem={({item}) => <ListItem roundAvatar title={item.name} 
-                                                subtitle={item.dueno.name} 
-                                                leftAvatar={{ source: { uri: 'http://40.87.47.203:8080/rimac/storage/files/'+item.path } }}
-                                                onPress={() => {this.goToDetail(item)}}
-                                                />}
-            />
-          </View>
+       
         </ScrollView>
-
       </View>
     );
   }
-
 }
 
 const styles = StyleSheet.create({
@@ -168,11 +123,5 @@ const styles = StyleSheet.create({
   helpLinkText: {
     fontSize: 14,
     color: '#2e78b7',
-  },  title:{
-    fontSize: 18,
-    color: '#2e78b7',
-
-  },othertext:{
-    fontSize: 14,
-  }
+  },
 });
