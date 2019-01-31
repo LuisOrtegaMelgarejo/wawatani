@@ -18,11 +18,13 @@ export default class DuenoScreen extends React.Component {
 
   constructor(props){
     super(props);
-    this.state = {isLoading: true,text: '',direccion: ''}
+    this.state = {isLoading: false,text: '',direccion: ''}
   }
+
   componentDidMount(){
     this.textInput.clear()
     this.textInput2.clear()
+    this.setState({text:'',direccion:''})
   }
 
   onPressLearnMore(direccion,tipo){

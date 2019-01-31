@@ -20,6 +20,17 @@ export default class SettingsScreen extends React.Component {
     this.state = {isLoading: true,items: []}
   }
   componentDidMount(){
+    this.subs = [
+      this.props.navigation.addListener('didFocus', () => this.isFocused()),
+    ];
+  }
+
+  isFocused(){
+
+    this.setState({
+      isLoading: true,
+      items: [],
+    });
 
     fetch('http://40.87.47.203:8080/rimac/api/dueno')
       .then((response) => response.json())
@@ -46,6 +57,9 @@ export default class SettingsScreen extends React.Component {
       .catch((error) =>{
         console.error(error);
       });
+  }
+  componentWillUnmount() {
+    this.subs.forEach(sub => sub.remove());
   }
 
   onPressLearnMore(nombre,tipo,dueno,image){

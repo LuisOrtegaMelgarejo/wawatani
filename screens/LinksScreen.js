@@ -54,28 +54,45 @@ export default class LinksScreen extends React.Component {
   }
 
   componentDidMount(){
+    this.subs = [
+      this.props.navigation.addListener('didFocus', () => this.isFocused()),
+    ];
+  }
+  
+  isFocused(){
 
-    return fetch('http://40.87.47.203:8080/rimac/api/mascotas')
-      .then((response) => response.json())
-      .then((responseJson) => {
+    this.setState({
+      isLoading: true,
+      items: [],
+      mascota: 0,
+      tipo: 0
+    });
 
-        var array = {}
-        for(let pet of responseJson) {
-          array[pet.id]=pet.name+' de '+pet.dueno.name+' ('+pet.type+')'
-        }
-        this.setState({
-          isLoading: false,
-          items: array,
-          mascota: 0,
-          tipo: 0
-        }, function(){
+    fetch('http://40.87.47.203:8080/rimac/api/mascotas')
+    .then((response) => response.json())
+    .then((responseJson) => {
 
-        });
+      var array = {}
+      for(let pet of responseJson) {
+        array[pet.id]=pet.name+' de '+pet.dueno.name+' ('+pet.type+')'
+      }
+      this.setState({
+        isLoading: false,
+        items: array,
+        mascota: 0,
+        tipo: 0
+      }, function(){
 
-      })
-      .catch((error) =>{
-        console.error(error);
       });
+
+    })
+    .catch((error) =>{
+      console.error(error);
+    });
+  }
+
+  componentWillUnmount() {
+    this.subs.forEach(sub => sub.remove());
   }
 
   render() {

@@ -16,7 +16,7 @@ export default class HomeScreen extends React.Component {
 
   constructor(props){
     super(props);
-    this.state = {isLoading: true}
+    this.state={isLoading: true,dataSource: []}
   }
 
   static navigationOptions = {
@@ -24,7 +24,18 @@ export default class HomeScreen extends React.Component {
   };
 
   componentDidMount(){
+    this.subs = [
+      this.props.navigation.addListener('didFocus', () => this.isFocused()),
+    ];
+  }
+
+  isFocused(){
     
+    this.setState({
+      isLoading: true,
+      dataSource: [],
+    });
+
     fetch('http://40.87.47.203:8080/rimac/api/mascotas')
     .then((response) => response.json())
     .then((responseJson) => {
@@ -40,8 +51,12 @@ export default class HomeScreen extends React.Component {
     .catch((error) =>{
       console.error(error);
     });
-
   }
+
+  componentWillUnmount() {
+    this.subs.forEach(sub => sub.remove());
+  }
+
 
   goToDetail(mascota) {
     this.props.navigation.navigate(
